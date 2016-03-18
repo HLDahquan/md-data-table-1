@@ -159,8 +159,7 @@ function mdColumn($compile) {
 
         if(headCtrl.allowMultipleSorts()) {
           if(!isActive()) {
-            console.log('test');
-            direction = 'md-desc';
+            direction = 'md-asc';
           }
         } else {
           headCtrl.order = [];
@@ -257,6 +256,7 @@ function mdColumn($compile) {
 }
 
 mdColumn.$inject = ['$compile'];
+
 
 angular.module('md.data.table')
   .decorator('$controller', controllerDecorator)
