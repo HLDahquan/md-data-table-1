@@ -76,6 +76,8 @@ function mdColumn($compile) {
           headCtrl.order = [];
         }
 
+        console.log(direction);
+
         if(direction === 'md-asc') {
           var key = '-' + scope.orderBy;
 
@@ -83,27 +85,27 @@ function mdColumn($compile) {
             headCtrl.order.splice(descendingPos, 1);
           }
 
-          if(ascendingPos >= 0) {
-            headCtrl.order[ascendingPos] = key;
+          // Reset the direction after leaving descending on multiple sorts
+          if(ascendingPos >= 0 && headCtrl.allowMultipleSorts()) {
+            // Next remove everything after it because the parent changed
+            headCtrl.order.splice(ascendingPos, (headCtrl.order.length - (ascendingPos + 1)) + 1);
           } else {
-            headCtrl.order.push(key);
+            if(ascendingPos >= 0) {
+              headCtrl.order[ascendingPos] = key;
+            } else {
+              headCtrl.order.push(key);
+            }
           }
         } else {
-          if(descendingPos >= 0) {
-            headCtrl.order.splice(descendingPos, 1);
-          }
+            if(descendingPos >= 0) {
+              headCtrl.order.splice(descendingPos, 1);
+            }
 
-          // Reset the direction after leaving descending on multiple sorts
-          if(descendingPos >= 0 && headCtrl.allowMultipleSorts()) {
-            // Next remove everything after it because the parent changed
-            headCtrl.order.splice(descendingPos, (headCtrl.order.length - (descendingPos + 1)) + 1);
-          } else {
             if(descendingPos >= 0) {
               headCtrl.order[descendingPos] = scope.orderBy;
             } else {
               headCtrl.order.push(scope.orderBy);
             }
-          }
         }
 
         if(angular.isFunction(headCtrl.onReorder)) {
